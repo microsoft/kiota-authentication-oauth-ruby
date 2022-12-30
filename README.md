@@ -1,14 +1,34 @@
-# Project
+# Kiota OAuth authentication provider library for Ruby
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+![Ruby](https://github.com/microsoft/kiota-authentication-oauth-ruby/actions/workflows/ruby.yml/badge.svg)
 
-As the maintainer of this project, please make a few updates:
+The Kiota OAuth authentication provider library for Ruby is the authentication provider implementation with [OAuth2](https://rubygems.org/gems/oauth2).
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+A [Kiota](https://github.com/microsoft/kiota) generated project will need a reference to a authentication provider library to authenticate HTTP requests to an API endpoint.
+
+Read more about Kiota [here](https://github.com/microsoft/kiota/blob/main/README.md).
+
+## Using the OAuth library
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem "microsoft_kiota_authentication_oauth", "0.5.0"
+```
+
+And then execute:
+
+```shell
+bundle install
+```
+
+Or install it yourself as:
+
+```shell
+gem install microsoft_kiota_authentication_oauth --version "0.5.0"
+```
 
 ## Contributing
 
