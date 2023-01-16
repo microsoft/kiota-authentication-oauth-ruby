@@ -29,7 +29,7 @@ module MicrosoftKiotaAuthenticationOAuth
       @cached_token = nil
 
       @host_validator = if allowed_hosts.nil? || allowed_hosts.size.zero?
-                          MicrsoftKiotaAbstractions::AllowedHostsValidator.new(['graph.microsoft.com', 'graph.microsoft.us', 'dod-graph.microsoft.us',
+                          MicrosoftKiotaAbstractions::AllowedHostsValidator.new(['graph.microsoft.com', 'graph.microsoft.us', 'dod-graph.microsoft.us',
                                                      'graph.microsoft.de', 'microsoftgraph.chinacloudapi.cn',
                                                      'canary.graph.microsoft.com'])
                         else
