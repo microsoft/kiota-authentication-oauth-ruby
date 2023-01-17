@@ -44,11 +44,9 @@ module MicrosoftKiotaAuthenticationOAuth
     end
 
     # Function to initialize the scope for the client credential context object.
-    # This function forces to default since gradual consent is not supported 
-    # for this flow.
+    # Only a single scope is supported for this flow and it's expected to be schme://service/.default
     def initialize_scopes(scopes = []) 
-      scope_str = 'https://graph.microsoft.com/.default'
-      @scopes = scope_str
+      @scopes = scopes[0] unless scopes.empty?
     end
 
 

@@ -29,14 +29,16 @@ module MicrosoftKiotaAuthenticationOAuth
       @cached_token = nil
 
       @host_validator = if allowed_hosts.nil? || allowed_hosts.size.zero?
-                          MicrosoftKiotaAbstractions::AllowedHostsValidator.new(['graph.microsoft.com', 'graph.microsoft.us', 'dod-graph.microsoft.us',
-                                                     'graph.microsoft.de', 'microsoftgraph.chinacloudapi.cn',
-                                                     'canary.graph.microsoft.com'])
+                          MicrosoftKiotaAbstractions::AllowedHostsValidator.new([])
                         else
                           MicrosoftKiotaAbstractions::AllowedHostsValidator.new(allowed_hosts)
                         end
       @token_request_context.initialize_oauth_provider
-      @token_request_context.initialize_scopes(scopes)
+      if scopes.nil?
+        @scopes = []
+      else
+        @scopes = scopes
+      end
     end
 
     # This function obtains the authorization token.
@@ -51,6 +53,10 @@ module MicrosoftKiotaAuthenticationOAuth
 
       raise StandardError, 'Only https is supported' if parsed_url.scheme != 'https'
 
+      if @scopes.empty?
+        @scopes << "#{parsed_url.scheme}://#{parsed_url.host}/.default"
+      end
+      @token_request_context.initialize_scopes(@scopes)
       Fiber.new do
         if @cached_token
           token = OAuth2::AccessToken.from_hash(@token_request_context.oauth_provider, @cached_token) 
