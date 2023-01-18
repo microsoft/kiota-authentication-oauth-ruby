@@ -47,7 +47,7 @@ module MicrosoftKiotaAuthenticationOAuth
     #   additional_params: hash of symbols to string values, ie { response_mode: 'fragment', prompt: 'login' }
     #                      default is empty hash
     def get_authorization_token(uri, additional_properties = {})
-      return nil if !uri || !@host_validator.url_host_valid?(uri)
+      nil if !uri || !@host_validator.url_host_valid?(uri)
 
       parsed_url = URI(uri)
 
@@ -60,20 +60,24 @@ module MicrosoftKiotaAuthenticationOAuth
       Fiber.new do
         if @cached_token
           token = OAuth2::AccessToken.from_hash(@token_request_context.oauth_provider, @cached_token) 
-          return token.token if !token.nil? && !token.expired?
+          token.token unless token.nil? || token.expired?
 
           if token.expired?
             token = token.refresh!
             @cached_token = token.to_hash
-            return token.token
+            token.token
           end
         end
 
         token = nil
         token = @token_request_context.get_token
 
-        @cached_token = token.to_hash unless token.nil?
-        return token.token unless token.nil?
+        if !token.nil?
+          @cached_token = token.to_hash
+          token.token
+        else
+          nil
+        end
       end
     end
 

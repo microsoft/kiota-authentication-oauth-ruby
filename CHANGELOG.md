@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed Microsoft Graph specific defaults.
+- Fixed an issue where the access token provider would fail on return.
 
 ## [0.6.0] - 2023-01-16
 
