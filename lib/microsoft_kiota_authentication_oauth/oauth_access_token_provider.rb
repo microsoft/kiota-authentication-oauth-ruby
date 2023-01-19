@@ -29,14 +29,16 @@ module MicrosoftKiotaAuthenticationOAuth
       @cached_token = nil
 
       @host_validator = if allowed_hosts.nil? || allowed_hosts.size.zero?
-                          MicrosoftKiotaAbstractions::AllowedHostsValidator.new(['graph.microsoft.com', 'graph.microsoft.us', 'dod-graph.microsoft.us',
-                                                     'graph.microsoft.de', 'microsoftgraph.chinacloudapi.cn',
-                                                     'canary.graph.microsoft.com'])
+                          MicrosoftKiotaAbstractions::AllowedHostsValidator.new([])
                         else
                           MicrosoftKiotaAbstractions::AllowedHostsValidator.new(allowed_hosts)
                         end
       @token_request_context.initialize_oauth_provider
-      @token_request_context.initialize_scopes(scopes)
+      if scopes.nil?
+        @scopes = []
+      else
+        @scopes = scopes
+      end
     end
 
     # This function obtains the authorization token.
@@ -45,29 +47,37 @@ module MicrosoftKiotaAuthenticationOAuth
     #   additional_params: hash of symbols to string values, ie { response_mode: 'fragment', prompt: 'login' }
     #                      default is empty hash
     def get_authorization_token(uri, additional_properties = {})
-      return nil if !uri || !@host_validator.url_host_valid?(uri)
+      nil if !uri || !@host_validator.url_host_valid?(uri)
 
       parsed_url = URI(uri)
 
       raise StandardError, 'Only https is supported' if parsed_url.scheme != 'https'
 
+      if @scopes.empty?
+        @scopes << "#{parsed_url.scheme}://#{parsed_url.host}/.default"
+      end
+      @token_request_context.initialize_scopes(@scopes)
       Fiber.new do
         if @cached_token
           token = OAuth2::AccessToken.from_hash(@token_request_context.oauth_provider, @cached_token) 
-          return token.token if !token.nil? && !token.expired?
+          token.token unless token.nil? || token.expired?
 
           if token.expired?
             token = token.refresh!
             @cached_token = token.to_hash
-            return token.token
+            token.token
           end
         end
 
         token = nil
         token = @token_request_context.get_token
 
-        @cached_token = token.to_hash unless token.nil?
-        return token.token unless token.nil?
+        if !token.nil?
+          @cached_token = token.to_hash
+          token.token
+        else
+          nil
+        end
       end
     end
 
