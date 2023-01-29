@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name = "microsoft_kiota_authentication_oauth"
   spec.version = MicrosoftKiotaAuthenticationOAuth::VERSION
   spec.authors = 'Microsoft Corporation'
-  spec.email = 'graphsdkpub@microsoft.com'
+  spec.email = 'graphsdkpub+ruby@microsoft.com'
   spec.description   = 'Kiota Authentication implementation with oauth2'
   spec.summary       = 'Microsoft Kiota Authentication OAuth - Kiota Ruby Authentication OAuth library'
   spec.homepage      = 'https://microsoft.github.io/kiota/'
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
     'source_code_uri' => 'https://github.com/microsoft/kiota-authentication-oauth-ruby',
     'github_repo'     => 'ssh://github.com/microsoft/kiota-authentication-oauth-ruby'
   }
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
